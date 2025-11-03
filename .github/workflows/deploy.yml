@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: npm
 
       - name: Install deps
         run: npm ci || npm install
@@ -33,7 +33,12 @@ jobs:
       - name: Build
         run: npm run build
 
-      # 👇 This step is important for Pages deployments
+      - name: Add CNAME to dist
+        run: echo "tinyml.seas.upenn.edu" > dist/CNAME
+
+      - name: Add SPA fallback (copy index -> 404)
+        run: cp dist/index.html dist/404.html || true
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
