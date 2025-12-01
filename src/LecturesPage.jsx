@@ -186,23 +186,26 @@ function ModulePicker({ modules, currentId, onPick }) {
 
 
 function LecturesGrid({ lectures, onOpen, currentLectureId, moduleId }) {
-  // Three shades of TinyML green
+  // Detect module number from moduleId --> 1, 2, or 3
+  const match = moduleId.match(/\d+/);
+  const num = match ? parseInt(match[0]) : 1;
+
   const COLOR = {
-    module1: {
+    1: {
       base: "bg-[#F2FCF7] border-[#D2F1E4]",
       active: "bg-[#DFF7EC] border-[#81D7B5]",
     },
-    module2: {
+    2: {
       base: "bg-[#E6F7EC] border-[#C8EBDD]",
       active: "bg-[#CFF0DF] border-[#75CDA5]",
     },
-    module3: {
+    3: {
       base: "bg-[#D8F2E2] border-[#B6E1CB]",
       active: "bg-[#BFE9D2] border-[#5FC598]",
     },
   };
 
-  const color = COLOR[moduleId] || COLOR.module1;
+  const color = COLOR[num] || COLOR[1];
 
   return (
     <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
@@ -225,6 +228,7 @@ function LecturesGrid({ lectures, onOpen, currentLectureId, moduleId }) {
     </div>
   );
 }
+
 
 /*
 function LecturesGrid({ lectures, onOpen, currentLectureId }) {
