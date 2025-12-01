@@ -152,21 +152,21 @@ function CollapsibleLinks({ title, html }) {
   const items = htmlToLinkItems(html);
   if (!items.length) return null;
   return (
-    <details className="rounded-xl border border-black/10 bg-black/5 open:bg-black/7 dark:border-white/10 dark:bg-white/5">
-      <summary className="list-none cursor-pointer select-none px-3 py-2 text-sm text-slate-800 hover:text-slate-900 dark:text-white/85 dark:hover:text-white flex items-center justify-between">
+    <details className="rounded-xl border border-black/10 bg-black/5 open:bg-black/7">
+      <summary className="list-none cursor-pointer select-none px-3 py-2 text-sm text-slate-800 hover:text-slate-900 flex items-center justify-between">
         <span className="text-[11px] uppercase tracking-wide">{title}</span>
-        <span className="text-[11px] text-slate-500 dark:text-white/50">{items.length}</span>
+        <span className="text-[11px] text-slate-500">{items.length}</span>
       </summary>
       <ul className="px-4 pb-3 pt-1 space-y-2 text-[15px] leading-6">
         {items.map((it, i) => (
           <li key={i} className="flex gap-2">
             <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 dark:bg-white/30 shrink-0" />
             {it.href ? (
-              <a className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:decoration-white/40 dark:hover:text-white" href={it.href} target="_blank" rel="noreferrer">
+              <a className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900" href={it.href} target="_blank" rel="noreferrer">
                 {it.label}
               </a>
             ) : (
-              <span className="text-slate-800 dark:text-white/90">{it.label}</span>
+              <span className="text-slate-800">{it.label}</span>
             )}
           </li>
         ))}
@@ -211,7 +211,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
 
   return (
     <div>
-      <div className="mb-4 text-xs text-slate-600 dark:text-white/60">
+      <div className="mb-4 text-xs text-slate-600">
         {lastUpdated
           ? `Last loaded: ${new Date(lastUpdated).toLocaleString()} ${
               fromCache ? "(cached)" : "(live)"
@@ -220,15 +220,15 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
       </div>
 
       {loading && !displayRows.length && (
-        <div className="text-slate-600 dark:text-white/70">Loading schedule…</div>
+        <div className="text-slate-600">Loading schedule…</div>
       )}
 
       {error && (
-        <div className="text-rose-600 dark:text-rose-300">Error: {error}</div>
+        <div className="text-rose-600">Error: {error}</div>
       )}
 
       {!loading && !displayRows.length && !error && (
-        <div className="text-slate-600 dark:text-white/70">No items yet.</div>
+        <div className="text-slate-600">No items yet.</div>
       )}
 
       {!error && displayRows.length > 0 && (
@@ -247,20 +247,20 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
 
             // Decide which module this row belongs to (handles "Part 1" / "Part I", etc.)
             let cardClass = "border-black/10 bg-black/5";
-            let chipClass = "bg-black/5 border-black/10 text-slate-700 dark:text-slate-900";
+            let chipClass = "bg-black/5 border-black/10 text-slate-700";
 
             if (/Part\s*(I|1)\b/i.test(moduleCombined)) {
               // Module 1 • Fundamentals of TinyML
               cardClass = "border-[#D2F1E4] bg-[#F2FCF7]";
-              chipClass = "bg-[#DFF7EC] border-[#81D7B5] text-slate-900 dark:text-slate-900";
+              chipClass = "bg-[#DFF7EC] border-[#81D7B5] text-slate-900";
             } else if (/Part\s*(II|2)\b/i.test(moduleCombined)) {
               // Module 2 • Applications of TinyML
               cardClass = "border-[#C8EBDD] bg-[#E6F7EC]";
-              chipClass = "bg-[#CFF0DF] border-[#75CDA5] text-slate-900 dark:text-slate-900";
+              chipClass = "bg-[#CFF0DF] border-[#75CDA5] text-slate-900";
             } else if (/Part\s*(III|3)\b/i.test(moduleCombined)) {
               // Module 3 • Deploying on Embedded Hardware
               cardClass = "border-[#B6E1CB] bg-[#D8F2E2]";
-              chipClass = "bg-[#BFE9D2] border-[#5FC598] text-slate-900 dark:text-slate-900";
+              chipClass = "bg-[#BFE9D2] border-[#5FC598] text-slate-900";
             }
 
             if (!date && !lecture && !topics && !slides) return null;
@@ -277,7 +277,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <div className="flex items-center gap-3">
                     {lecture && (
-                      <div className="font-semibold tracking-tight text-slate-900 dark:text-slate-900">
+                      <div className="font-semibold tracking-tight text-slate-900">
                         <H html={lecture} />
                       </div>
                     )}
@@ -295,7 +295,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                   </div>
 
                   {date && (
-                    <div className="font-medium text-slate-800 dark:text-slate-900">
+                    <div className="font-medium text-slate-800">
                       {date}
                     </div>
                   )}
@@ -306,10 +306,10 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                   <div>
                     {topics && (
                       <div>
-                        <div className="text-[11px] uppercase tracking-wide text-slate-600 dark:text-white/55">
+                        <div className="text-[11px] uppercase tracking-wide text-slate-600">
                           Topics
                         </div>
-                        <div className="mt-2 text-slate-900 dark:text-slate-900">
+                        <div className="mt-2 text-slate-900">
                           <H html={topics} />
                         </div>
                       </div>
@@ -325,16 +325,16 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                       <div className="grid gap-4 sm:grid-cols-2">
                         {assignment && (
                           <div>
-                            <div className="text-[11px] uppercase tracking-wide text-slate-600 dark:text-white/55">
+                            <div className="text-[11px] uppercase tracking-wide text-slate-600">
                               Assignment
                             </div>
                             <ul className="mt-2 space-y-2 text-[15px] leading-6">
                               {htmlToLinkItems(assignment).map((it, j) => (
                                 <li key={j} className="flex gap-2">
-                                  <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 dark:bg-white/30 shrink-0" />
+                                  <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 shrink-0" />
                                   {it.href ? (
                                     <a
-                                      className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:decoration-white/40 dark:hover:text-white"
+                                      className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900"
                                       href={it.href}
                                       target="_blank"
                                       rel="noreferrer"
@@ -342,7 +342,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                                       {it.label}
                                     </a>
                                   ) : (
-                                    <span className="text-slate-900 dark:text-slate-900">
+                                    <span className="text-slate-900">
                                       {it.label}
                                     </span>
                                   )}
@@ -354,7 +354,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
 
                         {quizzes && (
                           <div>
-                            <div className="text-[11px] uppercase tracking-wide text-slate-600 dark:text-white/55">
+                            <div className="text-[11px] uppercase tracking-wide text-slate-600">
                               Quizzes
                             </div>
                             <ul className="mt-2 space-y-2 text-[15px] leading-6">
@@ -363,7 +363,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                                   <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 dark:bg-white/30 shrink-0" />
                                   {it.href ? (
                                     <a
-                                      className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:decoration-white/40 dark:hover:text-white"
+                                      className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900"
                                       href={it.href}
                                       target="_blank"
                                       rel="noreferrer"
