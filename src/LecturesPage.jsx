@@ -184,6 +184,49 @@ function ModulePicker({ modules, currentId, onPick }) {
   );
 }
 
+
+function LecturesGrid({ lectures, onOpen, currentLectureId, moduleId }) {
+  // Three shades of TinyML green
+  const COLOR = {
+    module1: {
+      base: "bg-[#F2FCF7] border-[#D2F1E4]",
+      active: "bg-[#DFF7EC] border-[#81D7B5]",
+    },
+    module2: {
+      base: "bg-[#E6F7EC] border-[#C8EBDD]",
+      active: "bg-[#CFF0DF] border-[#75CDA5]",
+    },
+    module3: {
+      base: "bg-[#D8F2E2] border-[#B6E1CB]",
+      active: "bg-[#BFE9D2] border-[#5FC598]",
+    },
+  };
+
+  const color = COLOR[moduleId] || COLOR.module1;
+
+  return (
+    <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+      {lectures.map(lec => (
+        <button
+          key={lec.id}
+          onClick={() => onOpen(lec.id)}
+          className={`rounded-xl p-4 text-left border transition
+            ${currentLectureId === lec.id ? color.active : color.base}
+          `}
+        >
+          <div className="text-sm text-slate-600">
+            {lec.id.replace(/^lec/i, "Lecture ")}
+          </div>
+          <div className="mt-1 font-semibold text-slate-900">
+            {lec.title}
+          </div>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/*
 function LecturesGrid({ lectures, onOpen, currentLectureId }) {
   return (
     <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
@@ -205,6 +248,7 @@ function LecturesGrid({ lectures, onOpen, currentLectureId }) {
     </div>
   );
 }
+*/
 
 function LectureViewer({ title, url }) {
   const { html, loading, error } = useRtdPage(url);
@@ -278,7 +322,7 @@ export default function Lectures() {
   return (
     <Section eyebrow="Pick a Module" title="Lectures">
       <ModulePicker modules={MODULES} currentId={moduleId} onPick={id => setModuleId(id)} />
-      <LecturesGrid lectures={activeModule.lectures} onOpen={id => setLectureId(id)} currentLectureId={lectureId} />
+      <LecturesGrid lectures={activeModule.lectures} onOpen={id => setLectureId(id)} currentLectureId={lectureId} moduleId={module.id} />
       {currentLecture && <LectureViewer title={currentLecture.title} url={currentLecture.url} />}
     </Section>
   );
