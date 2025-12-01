@@ -183,7 +183,7 @@ function ModulePicker({ modules, currentId, onPick }) {
     </div>
   );
 }
-
+z
 
 function LecturesGrid({ lectures, onOpen, currentLectureId, moduleId }) {
   // Detect module number from moduleId --> 1, 2, or 3
@@ -326,7 +326,7 @@ export default function Lectures() {
   return (
     <Section eyebrow="Pick a Module" title="Lectures">
       <ModulePicker modules={MODULES} currentId={moduleId} onPick={id => setModuleId(id)} />
-      <LecturesGrid lectures={activeModule.lectures} onOpen={id => setLectureId(id)} currentLectureId={lectureId} moduleId={module.id} />
+      <LecturesGrid lectures={activeModule.lectures} onOpen={id => setLectureId(id)} currentLectureId={lectureId} moduleId={activeModule.id} />
       {currentLecture && <LectureViewer title={currentLecture.title} url={currentLecture.url} />}
     </Section>
   );
