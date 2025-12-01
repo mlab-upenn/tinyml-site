@@ -363,7 +363,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                                   <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 shrink-0" />
                                   {it.href ? (
                                     <a
-                                      className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900"
+                                      className="text-slate-900 underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900"
                                       href={it.href}
                                       target="_blank"
                                       rel="noreferrer"
