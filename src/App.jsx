@@ -204,6 +204,196 @@ function withDisplayModule(rows) {
   });
 }
 
+
+function ScheduleCards({ apiKey, sheetId, tabName }) {
+  const { rows, loading, error, lastUpdated, fromCache } = useSheet({ apiKey, sheetId, tabName });
+  const displayRows = withDisplayModule(rows);
+
+  return (
+    <div>
+      <div className="mb-4 text-xs text-slate-600 dark:text-white/60">
+        {lastUpdated
+          ? `Last loaded: ${new Date(lastUpdated).toLocaleString()} ${
+              fromCache ? "(cached)" : "(live)"
+            }`
+          : "Loading…"}
+      </div>
+
+      {loading && !displayRows.length && (
+        <div className="text-slate-600 dark:text-white/70">Loading schedule…</div>
+      )}
+
+      {error && (
+        <div className="text-rose-600 dark:text-rose-300">Error: {error}</div>
+      )}
+
+      {!loading && !displayRows.length && !error && (
+        <div className="text-slate-600 dark:text-white/70">No items yet.</div>
+      )}
+
+      {!error && displayRows.length > 0 && (
+        <div className="grid gap-6">
+          {displayRows.map((r, i) => {
+            const date       = stripHtml(get(r, "Date"));
+            const lecture    = get(r, "Lecture");
+            const topics     = get(r, "Topics");
+            const slides     = get(r, "Slides & Videos");
+            const tutorial   = get(r, "Tutorial");
+            const readings   = get(r, "Readings");
+            const assignment = get(r, "Assignment");
+            const quizzes    = get(r, "Quizzes");
+
+            const moduleCombined = r._moduleCombined || "";
+
+            // Decide which module this row belongs to (handles "Part 1" / "Part I", etc.)
+            let cardClass = "border-black/10 bg-black/5";
+            let chipClass = "bg-black/5 border-black/10 text-slate-700";
+
+            if (/Part\s*(I|1)\b/i.test(moduleCombined)) {
+              // Module 1 • Fundamentals of TinyML
+              cardClass = "border-[#D2F1E4] bg-[#F2FCF7]";
+              chipClass = "bg-[#DFF7EC] border-[#81D7B5] text-slate-900";
+            } else if (/Part\s*(II|2)\b/i.test(moduleCombined)) {
+              // Module 2 • Applications of TinyML
+              cardClass = "border-[#C8EBDD] bg-[#E6F7EC]";
+              chipClass = "bg-[#CFF0DF] border-[#75CDA5] text-slate-900";
+            } else if (/Part\s*(III|3)\b/i.test(moduleCombined)) {
+              // Module 3 • Deploying on Embedded Hardware
+              cardClass = "border-[#B6E1CB] bg-[#D8F2E2]";
+              chipClass = "bg-[#BFE9D2] border-[#5FC598] text-slate-900";
+            }
+
+            if (!date && !lecture && !topics && !slides) return null;
+
+            return (
+              <article
+                key={i}
+                className={`
+                  rounded-2xl border p-6 text-[15px] leading-6 shadow-sm shadow-black/5
+                  ${cardClass}
+                `}
+              >
+                {/* Top row: title + chip + date */}
+                <div className="flex flex-wrap items-baseline justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    {lecture && (
+                      <div className="font-semibold tracking-tight text-slate-900 dark:text-white">
+                        <H html={lecture} />
+                      </div>
+                    )}
+
+                    {moduleCombined && (
+                      <span
+                        className={`
+                          rounded-full px-2.5 py-0.5 text-[11px] font-medium border
+                          ${chipClass}
+                        `}
+                      >
+                        {moduleCombined}
+                      </span>
+                    )}
+                  </div>
+
+                  {date && (
+                    <div className="font-medium text-slate-800 dark:text-white/80">
+                      {date}
+                    </div>
+                  )}
+                </div>
+
+                {/* Body: topics + resources */}
+                <div className="mt-5 grid gap-6 lg:grid-cols-2">
+                  <div>
+                    {topics && (
+                      <div>
+                        <div className="text-[11px] uppercase tracking-wide text-slate-600 dark:text-white/55">
+                          Topics
+                        </div>
+                        <div className="mt-2 text-slate-900 dark:text-white/90">
+                          <H html={topics} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid gap-4">
+                    <CollapsibleLinks title="Slides & Videos" html={slides} />
+                    <CollapsibleLinks title="Tutorial" html={tutorial} />
+                    <CollapsibleLinks title="Readings" html={readings} />
+
+                    {(assignment || quizzes) && (
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        {assignment && (
+                          <div>
+                            <div className="text-[11px] uppercase tracking-wide text-slate-600 dark:text-white/55">
+                              Assignment
+                            </div>
+                            <ul className="mt-2 space-y-2 text-[15px] leading-6">
+                              {htmlToLinkItems(assignment).map((it, j) => (
+                                <li key={j} className="flex gap-2">
+                                  <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 dark:bg-white/30 shrink-0" />
+                                  {it.href ? (
+                                    <a
+                                      className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:decoration-white/40 dark:hover:text-white"
+                                      href={it.href}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                    >
+                                      {it.label}
+                                    </a>
+                                  ) : (
+                                    <span className="text-slate-900 dark:text-white/90">
+                                      {it.label}
+                                    </span>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {quizzes && (
+                          <div>
+                            <div className="text-[11px] uppercase tracking-wide text-slate-600 dark:text-white/55">
+                              Quizzes
+                            </div>
+                            <ul className="mt-2 space-y-2 text-[15px] leading-6">
+                              {htmlToLinkItems(quizzes).map((it, j) => (
+                                <li key={j} className="flex gap-2">
+                                  <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 dark:bg-white/30 shrink-0" />
+                                  {it.href ? (
+                                    <a
+                                      className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:decoration-white/40 dark:hover:text-white"
+                                      href={it.href}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                    >
+                                      {it.label}
+                                    </a>
+                                  ) : (
+                                    <span className="text-slate-900 dark:text-white/90">
+                                      {it.label}
+                                    </span>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/*
 function ScheduleCards({ apiKey, sheetId, tabName }) {
   const { rows, loading, error, lastUpdated, fromCache } = useSheet({ apiKey, sheetId, tabName });
   const displayRows = withDisplayModule(rows);
@@ -226,35 +416,62 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
             const readings   = get(r, "Readings");
             const assignment = get(r, "Assignment");
             const quizzes    = get(r, "Quizzes");
-            const moduleCombined = r._moduleCombined;
+
+            const moduleCombined = r._moduleCombined || "";
+
+            // Decide which module this row belongs to (handles "Part 1" / "Part I", etc.)
+            let cardClass = "border-black/10 bg-black/5";
+            let chipClass = "bg-black/5 border-black/10 text-slate-700";
+
+            if (/Part\s*(I|1)\b/i.test(moduleCombined)) {
+              // Module 1 • Fundamentals of TinyML
+              cardClass = "border-[#D2F1E4] bg-[#F2FCF7]";
+              chipClass = "bg-[#DFF7EC] border-[#81D7B5] text-slate-900";
+            } else if (/Part\s*(II|2)\b/i.test(moduleCombined)) {
+              // Module 2 • Applications of TinyML
+              cardClass = "border-[#C8EBDD] bg-[#E6F7EC]";
+              chipClass = "bg-[#CFF0DF] border-[#75CDA5] text-slate-900";
+            } else if (/Part\s*(III|3)\b/i.test(moduleCombined)) {
+              // Module 3 • Deploying on Embedded Hardware
+              cardClass = "border-[#B6E1CB] bg-[#D8F2E2]";
+              chipClass = "bg-[#BFE9D2] border-[#5FC598] text-slate-900";
+            }
+
             if (!date && !lecture && !topics && !slides) return null;
+
             return (
-              <article key={i} className="rounded-2xl border border-black/10 bg-black/5 p-6 text-[15px] leading-6 shadow-sm shadow-black/5 dark:border-white/10 dark:bg-white/[0.06]">
+              <article
+                key={i}
+                className={`
+                  rounded-2xl border p-6 text-[15px] leading-6 shadow-sm shadow-black/5
+                  ${cardClass}
+                `}
+              >
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    {lecture && (<div className="font-semibold tracking-tight text-slate-900 dark:text-white"><H html={lecture} /></div>)}
+                    {lecture && (
+                      <div className="font-semibold tracking-tight text-slate-900">
+                        <H html={lecture} />
+                      </div>
+                    )}
 
                     {moduleCombined && (
                       <span
                         className={`
                           rounded-full px-2.5 py-0.5 text-[11px] font-medium border
-                          ${
-                            moduleCombined.startsWith("Part I")
-                              ? "bg-[#F2FCF7] border-[#D2F1E4] text-slate-700"
-                            : moduleCombined.startsWith("Part II")
-                              ? "bg-[#E6F7EC] border-[#C8EBDD] text-slate-700"
-                            : moduleCombined.startsWith("Part III")
-                              ? "bg-[#D8F2E2] border-[#B6E1CB] text-slate-700"
-                            : "bg-black/5 border-black/10 text-slate-700"
-                          }
+                          ${chipClass}
                         `}
                       >
                         {moduleCombined}
                       </span>
                     )}
-                   
+                  </div>
+                  {date && (
+                    <div className="font-medium text-slate-800">
+                      {date}
+                    </div>
+                  )}
 
-                   </div>
                   {date && <div className="font-medium text-slate-800 dark:text-white/80">{date}</div>}
                 </div>
                 <div className="mt-5 grid gap-6 lg:grid-cols-2">
@@ -318,6 +535,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
     </div>
   );
 }
+*/
 
 /* 4) PAGE CHROME */
 function Section({ title, eyebrow, children }) {
