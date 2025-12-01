@@ -11,6 +11,21 @@ const SHEET_ID = "16Q3GRHir6zs3Vc1M30F_2cpTzp48muh2bCTlmlHdnco";
 const TAB_NAME = "Sheet1";
 
 /* THEME HOOK */
+
+function useTheme() {
+  // Always force light mode
+  React.useEffect(() => {
+    localStorage.setItem("theme", "light");
+    const root = document.documentElement;
+    root.classList.remove("dark");
+  }, []);
+
+  return {
+    theme: "light",
+    toggle: () => {}, // no-op for now
+  };
+}
+/*
 function useTheme() {
   const [theme, setTheme] = React.useState(
     () =>
@@ -24,7 +39,7 @@ function useTheme() {
   }, [theme]);
   return { theme, toggle: () => setTheme((t) => (t === "dark" ? "light" : "dark")) };
 }
-
+*/
 /* 1) FETCH + CACHE (Schedule) */
 const CACHE_TTL_MS = 0;
 
