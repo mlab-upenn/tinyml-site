@@ -69,12 +69,12 @@ async function fetchFromSheetsAPI({ apiKey, sheetId, tabName, range = "A:Z" }) {
           const slice = full.slice(start, end);
           const href  = v.runs[idx].format?.link?.uri;
           html += href
-            ? `<a href="${href}" target="_blank" rel="noreferrer" class="text-slate-900 underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900">${slice}</a>`
+            ? `<a href="${href}" target="_blank" rel="noreferrer" class="text-slate-900 dark:text-slate-100 underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:hover:text-white">${slice}</a>`
             : slice;
         }
         obj[h] = html;
       } else if (v.link) {
-        obj[h] = `<a href="${v.link}" target="_blank" rel="noreferrer" class="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900">${v.text || v.link}</a>`;
+        obj[h] = `<a href="${v.link}" target="_blank" rel="noreferrer" class="text-slate-900 dark:text-slate-100 underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:hover:text-white">${v.text || v.link}</a>`;
       } else {
         obj[h] = (v.text || "").replace(/\n/g, "<br/>");
       }
@@ -153,20 +153,20 @@ function CollapsibleLinks({ title, html }) {
   if (!items.length) return null;
   return (
     <details className="rounded-xl border border-black/10 bg-black/5 open:bg-black/7">
-      <summary className="list-none cursor-pointer select-none px-3 py-2 text-sm text-slate-800 hover:text-slate-900 flex items-center justify-between">
-        <span className="text-[11px] uppercase tracking-wide">{title}</span>
-        <span className="text-[11px] text-slate-500">{items.length}</span>
+      <summary className="list-none cursor-pointer select-none px-3 py-2 text-sm text-slate-800 dark:text-slate-100 hover:text-slate-900 dark:hover:text-white flex items-center justify-between">
+        <span className="text-[11px] uppercase tracking-wide text-slate-700 dark:text-slate-300">{title}</span>
+        <span className="text-[11px] text-slate-500 dark:text-slate-400">{items.length}</span>
       </summary>
       <ul className="px-4 pb-3 pt-1 space-y-2 text-[15px] leading-6">
         {items.map((it, i) => (
           <li key={i} className="flex gap-2">
             <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 shrink-0" />
             {it.href ? (
-              <a className="text-slate-900 underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900" href={it.href} target="_blank" rel="noreferrer">
+              <a className="text-slate-900 dark:text-slate-100 underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:hover:text-white" href={it.href} target="_blank" rel="noreferrer">
                 {it.label}
               </a>
             ) : (
-              <span className="text-slate-800">{it.label}</span>
+              <span className="text-slate-800 dark:text-slate-100">{it.label}</span>
             )}
           </li>
         ))}
@@ -246,8 +246,8 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
             const moduleCombined = r._moduleCombined || "";
 
             // Decide which module this row belongs to (handles "Part 1" / "Part I", etc.)
-            let cardClass = "border-black/10 bg-black/5";
-            let chipClass = "bg-black/5 border-black/10 text-slate-700";
+            let cardClass = "border-black/10 bg-black/5 dark:border-white/15 dark:bg-slate-800/80";
+            let chipClass = "bg-black/5 border-black/10 text-slate-700 dark:bg-slate-700/50 dark:border-white/30 dark:text-slate-100";
 
             if (/Part\s*(I|1)\b/i.test(moduleCombined)) {
               // Module 1 • Fundamentals of TinyML
@@ -277,7 +277,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <div className="flex items-center gap-3">
                     {lecture && (
-                      <div className="font-semibold tracking-tight text-slate-900">
+                      <div className="font-semibold tracking-tight text-slate-900 dark:text-white">
                         <H html={lecture} />
                       </div>
                     )}
@@ -295,7 +295,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                   </div>
 
                   {date && (
-                    <div className="font-medium text-slate-800">
+                    <div className="font-medium text-slate-800 dark:text-slate-100">
                       {date}
                     </div>
                   )}
@@ -306,10 +306,10 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                   <div>
                     {topics && (
                       <div>
-                        <div className="text-[11px] uppercase tracking-wide text-slate-600">
+                        <div className="text-[11px] uppercase tracking-wide text-slate-600 dark:text-slate-300">
                           Topics
                         </div>
-                        <div className="mt-2 text-slate-900">
+                        <div className="mt-2 text-slate-900 dark:text-slate-100">
                           <H html={topics} />
                         </div>
                       </div>
