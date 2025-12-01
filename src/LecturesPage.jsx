@@ -210,28 +210,6 @@ function ModulePicker({ modules, currentId, onPick }) {
   );
 }
 
-/*
-function ModulePicker({ modules, currentId, onPick }) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {modules.map(m => (
-        <button
-          key={m.id}
-          onClick={() => onPick(m.id)}
-          className={`rounded-xl px-3 py-1.5 text-sm border transition ${
-            currentId === m.id
-              ? "border-black/20 bg-black/10 text-slate-900 dark:border-white/40 dark:bg-white/15 dark:text-white"
-              : "border-black/10 bg-black/5 text-slate-700 hover:text-slate-900 dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:text-white"
-          }`}
-        >
-          {m.title}
-        </button>
-      ))}
-    </div>
-  );
-}
-*/
-
 function LecturesGrid({ lectures, onOpen, currentLectureId, moduleId }) {
   // Detect module number from moduleId --> 1, 2, or 3
   const match = moduleId.match(/\d+/);
@@ -275,31 +253,6 @@ function LecturesGrid({ lectures, onOpen, currentLectureId, moduleId }) {
     </div>
   );
 }
-
-
-/*
-function LecturesGrid({ lectures, onOpen, currentLectureId }) {
-  return (
-    <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-      {lectures.map(lec => (
-        <button
-          key={lec.id}
-          onClick={() => onOpen(lec.id)}
-          className={`rounded-xl p-4 text-left border transition ${
-            currentLectureId === lec.id
-              ? "border-emerald-300 bg-emerald-50 dark:border-emerald-500/40 dark:bg-emerald-500/10"
-              : "border-black/10 bg-black/5 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
-          }`}
-        >
-          <div className="text-sm text-slate-500 dark:text-white/60">{lec.id.replace(/^lec/i, "Lecture ")}</div>
-          <div className="mt-1 font-semibold text-slate-900 dark:text-white">{lec.title}</div>
-          {!lec.url && <div className="mt-1 text-xs text-slate-500 dark:text-white/50">Link coming soon</div>}
-        </button>
-      ))}
-    </div>
-  );
-}
-*/
 
 function LectureViewer({ title, url }) {
   const { html, loading, error } = useRtdPage(url);
