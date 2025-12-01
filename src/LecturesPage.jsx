@@ -183,7 +183,6 @@ function ModulePicker({ modules, currentId, onPick }) {
     </div>
   );
 }
-z
 
 function LecturesGrid({ lectures, onOpen, currentLectureId, moduleId }) {
   // Detect module number from moduleId --> 1, 2, or 3
