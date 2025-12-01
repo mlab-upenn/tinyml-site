@@ -69,12 +69,12 @@ async function fetchFromSheetsAPI({ apiKey, sheetId, tabName, range = "A:Z" }) {
           const slice = full.slice(start, end);
           const href  = v.runs[idx].format?.link?.uri;
           html += href
-            ? `<a href="${href}" target="_blank" rel="noreferrer" class="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:decoration-white/40 dark:hover:text-white">${slice}</a>`
+            ? `<a href="${href}" target="_blank" rel="noreferrer" class="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900">${slice}</a>`
             : slice;
         }
         obj[h] = html;
       } else if (v.link) {
-        obj[h] = `<a href="${v.link}" target="_blank" rel="noreferrer" class="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:decoration-white/40 dark:hover:text-white">${v.text || v.link}</a>`;
+        obj[h] = `<a href="${v.link}" target="_blank" rel="noreferrer" class="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900">${v.text || v.link}</a>`;
       } else {
         obj[h] = (v.text || "").replace(/\n/g, "<br/>");
       }
@@ -162,7 +162,7 @@ function CollapsibleLinks({ title, html }) {
           <li key={i} className="flex gap-2">
             <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 shrink-0" />
             {it.href ? (
-              <a className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900" href={it.href} target="_blank" rel="noreferrer">
+              <a className="text-slate-900 underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900" href={it.href} target="_blank" rel="noreferrer">
                 {it.label}
               </a>
             ) : (
