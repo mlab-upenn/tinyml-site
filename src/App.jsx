@@ -422,8 +422,8 @@ function ThemeFAB({ theme, onToggle }) {
       aria-label={`Switch to ${label} mode`}
       className="fixed z-[9999] px-3 py-2 rounded-full text-sm border bg-white text-slate-800 shadow-lg shadow-black/20
                  dark:bg-slate-800 dark:text-white dark:border-white/15
-                 right-[max(env(safe-area-inset-right),1rem)]
-                 bottom-[max(env(safe-area-inset-bottom),1rem)]
+                 right-4
+                 bottom-4
                  border-black/10 dark:border-white/15"
     >
       {label}
