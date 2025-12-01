@@ -176,15 +176,15 @@ function ModulePicker({ modules, currentId, onPick }) {
   const COLOR = {
     1: {
       base: "bg-[#F2FCF7] border-[#D2F1E4] text-slate-700",
-      active: "bg-[#DFF7EC] border-[#81D7B5] text-slate-900",
+      active: "bg-[#CFF3E4] border-[#81D7B5] text-slate-900",
     },
     2: {
-      base: "bg-[#E6F7EC] border-[#C8EBDD] text-slate-700",
-      active: "bg-[#CFF0DF] border-[#75CDA5] text-slate-900",
+      base: "bg-[#F0F8FF] border-[#D3E6F5] text-slate-700",
+      active: "bg-[#D5ECFF] border-[#90C6F2] text-slate-900",
     },
     3: {
-      base: "bg-[#D8F2E2] border-[#B6E1CB] text-slate-700",
-      active: "bg-[#BFE9D2] border-[#5FC598] text-slate-900",
+      base: "bg-[#E6FAF4] border-[#C6EDE0] text-slate-700",
+      active: "bg-[#C4F1E5] border-[#7CD9C0] text-slate-900",
     },
   };
 
@@ -253,6 +253,7 @@ function LecturesGrid({ lectures, onOpen, currentLectureId, moduleId }) {
     </div>
   );
 }
+
 
 function LectureViewer({ title, url }) {
   const { html, loading, error } = useRtdPage(url);
