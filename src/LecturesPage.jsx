@@ -164,6 +164,53 @@ function Section({ title, eyebrow, children }) {
   );
 }
 
+
+
+function ModulePicker({ modules, currentId, onPick }) {
+  // To get module IDs: 1,2,3
+  const getModuleNum = (id) => {
+    const match = id.match(/\d+/);
+    return match ? parseInt(match[0]) : 1;
+  };
+
+  const COLOR = {
+    1: {
+      base: "bg-[#F2FCF7] border-[#D2F1E4] text-slate-700",
+      active: "bg-[#DFF7EC] border-[#81D7B5] text-slate-900",
+    },
+    2: {
+      base: "bg-[#E6F7EC] border-[#C8EBDD] text-slate-700",
+      active: "bg-[#CFF0DF] border-[#75CDA5] text-slate-900",
+    },
+    3: {
+      base: "bg-[#D8F2E2] border-[#B6E1CB] text-slate-700",
+      active: "bg-[#BFE9D2] border-[#5FC598] text-slate-900",
+    },
+  };
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {modules.map((m) => {
+        const num = getModuleNum(m.id);
+        const palette = COLOR[num];
+
+        return (
+          <button
+            key={m.id}
+            onClick={() => onPick(m.id)}
+            className={`rounded-xl px-4 py-1.5 text-sm border transition
+              ${currentId === m.id ? palette.active : palette.base}
+            `}
+          >
+            {m.title}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/*
 function ModulePicker({ modules, currentId, onPick }) {
   return (
     <div className="flex flex-wrap gap-2">
@@ -183,6 +230,7 @@ function ModulePicker({ modules, currentId, onPick }) {
     </div>
   );
 }
+*/
 
 function LecturesGrid({ lectures, onOpen, currentLectureId, moduleId }) {
   // Detect module number from moduleId --> 1, 2, or 3
