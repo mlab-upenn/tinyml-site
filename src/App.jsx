@@ -414,7 +414,6 @@ function Section({ title, eyebrow, children }) {
 }
 
 function ThemeFAB({ theme, onToggle }) {
-  console.log("Current theme:", theme);
   const label = theme === "dark" ? "Light" : "Dark";
   return (
     <button
@@ -487,7 +486,7 @@ export default function App() {
     </button>
   );
   return (
-    <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
+    <div className="relative min-h-screen bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
       <header className="sticky top-0 z-10 border-b border-black/10 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-900/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
