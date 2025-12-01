@@ -233,8 +233,28 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <div className="flex items-center gap-3">
                     {lecture && (<div className="font-semibold tracking-tight text-slate-900 dark:text-white"><H html={lecture} /></div>)}
-                    {moduleCombined && (<span className="rounded-full border border-black/10 bg-black/5 px-2.5 py-0.5 text-[11px] text-slate-700 dark:border-white/15 dark:bg-white/10 dark:text-white/75">{moduleCombined}</span>)}
-                  </div>
+
+                    {moduleCombined && (
+                      <span
+                        className={`
+                          rounded-full px-2.5 py-0.5 text-[11px] font-medium border
+                          ${
+                            moduleCombined.startsWith("Part I")
+                              ? "bg-[#F2FCF7] border-[#D2F1E4] text-slate-700"
+                            : moduleCombined.startsWith("Part II")
+                              ? "bg-[#E6F7EC] border-[#C8EBDD] text-slate-700"
+                            : moduleCombined.startsWith("Part III")
+                              ? "bg-[#D8F2E2] border-[#B6E1CB] text-slate-700"
+                            : "bg-black/5 border-black/10 text-slate-700"
+                          }
+                        `}
+                      >
+                        {moduleCombined}
+                      </span>
+                    )}
+                   
+
+                   </div>
                   {date && <div className="font-medium text-slate-800 dark:text-white/80">{date}</div>}
                 </div>
                 <div className="mt-5 grid gap-6 lg:grid-cols-2">
