@@ -414,6 +414,7 @@ function Section({ title, eyebrow, children }) {
 }
 
 function ThemeFAB({ theme, onToggle }) {
+  console.log("Current theme:", theme);
   const label = theme === "dark" ? "Light" : "Dark";
   return (
     <button
