@@ -247,20 +247,20 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
 
             // Decide which module this row belongs to (handles "Part 1" / "Part I", etc.)
             let cardClass = "border-black/10 bg-black/5";
-            let chipClass = "bg-black/5 border-black/10 text-slate-700";
+            let chipClass = "bg-black/5 border-black/10 text-slate-700 dark:text-slate-900";
 
             if (/Part\s*(I|1)\b/i.test(moduleCombined)) {
               // Module 1 • Fundamentals of TinyML
               cardClass = "border-[#D2F1E4] bg-[#F2FCF7]";
-              chipClass = "bg-[#DFF7EC] border-[#81D7B5] text-slate-900";
+              chipClass = "bg-[#DFF7EC] border-[#81D7B5] text-slate-900 dark:text-slate-900";
             } else if (/Part\s*(II|2)\b/i.test(moduleCombined)) {
               // Module 2 • Applications of TinyML
               cardClass = "border-[#C8EBDD] bg-[#E6F7EC]";
-              chipClass = "bg-[#CFF0DF] border-[#75CDA5] text-slate-900";
+              chipClass = "bg-[#CFF0DF] border-[#75CDA5] text-slate-900 dark:text-slate-900";
             } else if (/Part\s*(III|3)\b/i.test(moduleCombined)) {
               // Module 3 • Deploying on Embedded Hardware
               cardClass = "border-[#B6E1CB] bg-[#D8F2E2]";
-              chipClass = "bg-[#BFE9D2] border-[#5FC598] text-slate-900";
+              chipClass = "bg-[#BFE9D2] border-[#5FC598] text-slate-900 dark:text-slate-900";
             }
 
             if (!date && !lecture && !topics && !slides) return null;
@@ -277,7 +277,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <div className="flex items-center gap-3">
                     {lecture && (
-                      <div className="font-semibold tracking-tight text-slate-900 dark:text-white">
+                      <div className="font-semibold tracking-tight text-slate-900 dark:text-slate-900">
                         <H html={lecture} />
                       </div>
                     )}
@@ -295,7 +295,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                   </div>
 
                   {date && (
-                    <div className="font-medium text-slate-800 dark:text-white/80">
+                    <div className="font-medium text-slate-800 dark:text-slate-900">
                       {date}
                     </div>
                   )}
@@ -309,7 +309,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                         <div className="text-[11px] uppercase tracking-wide text-slate-600 dark:text-white/55">
                           Topics
                         </div>
-                        <div className="mt-2 text-slate-900 dark:text-white/90">
+                        <div className="mt-2 text-slate-900 dark:text-slate-900">
                           <H html={topics} />
                         </div>
                       </div>
@@ -342,7 +342,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                                       {it.label}
                                     </a>
                                   ) : (
-                                    <span className="text-slate-900 dark:text-white/90">
+                                    <span className="text-slate-900 dark:text-slate-900">
                                       {it.label}
                                     </span>
                                   )}
@@ -371,7 +371,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                                       {it.label}
                                     </a>
                                   ) : (
-                                    <span className="text-slate-900 dark:text-white/90">
+                                    <span className="text-slate-900 dark:text-slate-900">
                                       {it.label}
                                     </span>
                                   )}
