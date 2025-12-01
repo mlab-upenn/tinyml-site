@@ -250,17 +250,20 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
             let chipClass = "bg-black/5 border-black/10 text-slate-700 dark:bg-slate-700/50 dark:border-white/30 dark:text-slate-100";
 
             if (/Part\s*(I|1)\b/i.test(moduleCombined)) {
-              // Module 1 • Fundamentals of TinyML
-              cardClass = "border-[#D2F1E4] bg-[#F2FCF7]";
-              chipClass = "bg-[#DFF7EC] border-[#81D7B5] text-slate-900";
+              cardClass =
+                "border-[#D2F1E4] bg-[#F2FCF7] dark:border-emerald-900 dark:bg-emerald-950/40";
+              chipClass =
+                "bg-[#DFF7EC] border-[#81D7B5] text-slate-900 dark:bg-emerald-900 dark:border-emerald-700 dark:text-emerald-200";
             } else if (/Part\s*(II|2)\b/i.test(moduleCombined)) {
-              // Module 2 • Applications of TinyML
-              cardClass = "border-[#C8EBDD] bg-[#E6F7EC]";
-              chipClass = "bg-[#CFF0DF] border-[#75CDA5] text-slate-900";
+              cardClass =
+                "border-[#C8EBDD] bg-[#E6F7EC] dark:border-teal-900 dark:bg-teal-950/40";
+              chipClass =
+                "bg-[#CFF0DF] border-[#75CDA5] text-slate-900 dark:bg-teal-900 dark:border-teal-700 dark:text-teal-200";
             } else if (/Part\s*(III|3)\b/i.test(moduleCombined)) {
-              // Module 3 • Deploying on Embedded Hardware
-              cardClass = "border-[#B6E1CB] bg-[#D8F2E2]";
-              chipClass = "bg-[#BFE9D2] border-[#5FC598] text-slate-900";
+              cardClass =
+                "border-[#B6E1CB] bg-[#D8F2E2] dark:border-green-900 dark:bg-green-950/40";
+              chipClass =
+                "bg-[#BFE9D2] border-[#5FC598] text-slate-900 dark:bg-green-900 dark:border-green-700 dark:text-green-200";
             }
 
             if (!date && !lecture && !topics && !slides) return null;
@@ -325,7 +328,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                       <div className="grid gap-4 sm:grid-cols-2">
                         {assignment && (
                           <div>
-                            <div className="text-[11px] uppercase tracking-wide text-slate-600">
+                            <div className="text-[11px] uppercase tracking-wide text-slate-600 dark:text-slate-300">
                               Assignment
                             </div>
                             <ul className="mt-2 space-y-2 text-[15px] leading-6">
@@ -334,7 +337,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                                   <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 shrink-0" />
                                   {it.href ? (
                                     <a
-                                      className="text-slate-900 underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900"
+                                      className="text-slate-900 dark:text-slate-100 underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:hover:text-white"
                                       href={it.href}
                                       target="_blank"
                                       rel="noreferrer"
@@ -342,7 +345,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                                       {it.label}
                                     </a>
                                   ) : (
-                                    <span className="text-slate-900">
+                                    <span className="text-slate-900 dark:text-slate-100">
                                       {it.label}
                                     </span>
                                   )}
@@ -354,7 +357,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
 
                         {quizzes && (
                           <div>
-                            <div className="text-[11px] uppercase tracking-wide text-slate-600">
+                            <div className="text-[11px] uppercase tracking-wide text-slate-600 dark:text-slate-300">
                               Quizzes
                             </div>
                             <ul className="mt-2 space-y-2 text-[15px] leading-6">
@@ -363,7 +366,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                                   <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 shrink-0" />
                                   {it.href ? (
                                     <a
-                                      className="text-slate-900 underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900"
+                                      className="text-slate-900 dark:text-slate-100 underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:hover:text-white"
                                       href={it.href}
                                       target="_blank"
                                       rel="noreferrer"
@@ -371,7 +374,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                                       {it.label}
                                     </a>
                                   ) : (
-                                    <span className="text-slate-900">
+                                    <span className="text-slate-900 dark:text-slate-100">
                                       {it.label}
                                     </span>
                                   )}
