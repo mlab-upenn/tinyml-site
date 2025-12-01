@@ -14,8 +14,7 @@ const TAB_NAME = "Sheet1";
 function useTheme() {
   const [theme, setTheme] = React.useState(
     () =>
-      localStorage.getItem("theme") ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      localStorage.getItem("theme") ||  "light"
   );
   React.useEffect(() => {
     localStorage.setItem("theme", theme);
