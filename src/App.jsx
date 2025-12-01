@@ -160,7 +160,7 @@ function CollapsibleLinks({ title, html }) {
       <ul className="px-4 pb-3 pt-1 space-y-2 text-[15px] leading-6">
         {items.map((it, i) => (
           <li key={i} className="flex gap-2">
-            <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 dark:bg-white/30 shrink-0" />
+            <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 shrink-0" />
             {it.href ? (
               <a className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900" href={it.href} target="_blank" rel="noreferrer">
                 {it.label}
@@ -360,7 +360,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                             <ul className="mt-2 space-y-2 text-[15px] leading-6">
                               {htmlToLinkItems(quizzes).map((it, j) => (
                                 <li key={j} className="flex gap-2">
-                                  <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 dark:bg-white/30 shrink-0" />
+                                  <span className="mt-2 block h-[6px] w-[6px] rounded-full bg-slate-300 shrink-0" />
                                   {it.href ? (
                                     <a
                                       className="underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900"
@@ -371,7 +371,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                                       {it.label}
                                     </a>
                                   ) : (
-                                    <span className="text-slate-900 dark:text-slate-900">
+                                    <span className="text-slate-900">
                                       {it.label}
                                     </span>
                                   )}
