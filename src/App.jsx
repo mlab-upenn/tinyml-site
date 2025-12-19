@@ -13,18 +13,26 @@ const TAB_NAME = "Sheet1";
 /* THEME HOOK */
 
 function useTheme() {
-  // Always force light mode
+  const [theme, setTheme] = React.useState(() => {
+    const stored = localStorage.getItem("theme"); // "light" | "dark" | null
+    if (stored === "light" || stored === "dark") return stored;
+    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
+    return prefersDark ? "dark" : "light";
+  });
+
   React.useEffect(() => {
-    localStorage.setItem("theme", "light");
+    localStorage.setItem("theme", theme);
     const root = document.documentElement;
-    root.classList.remove("dark");
-  }, []);
+    if (theme === "dark") root.classList.add("dark");
+    else root.classList.remove("dark");
+  }, [theme]);
 
   return {
-    theme: "light",
-    toggle: () => {}, // no-op for now
+    theme,
+    toggle: () => setTheme((t) => (t === "dark" ? "light" : "dark")),
   };
 }
+
 /*
 function useTheme() {
   const [theme, setTheme] = React.useState(
