@@ -4,6 +4,8 @@ import ReactDOM from "react-dom";
 import SyllabusPage from "./SyllabusPageHardcoded.jsx";
 import Lectures from "./LecturesPage.jsx";
 import StaffPage from "./StaffPage.jsx"; 
+import ProjectsPage from "./ProjectsPage.jsx";
+
 import "./index.css";
 
 /* 0) CONFIG (Schedule sheet) */
@@ -523,6 +525,7 @@ export default function App() {
           <nav className="flex items-center gap-2">
             <NavBtn id="home" label="Home" />
             <NavBtn id="schedule" label="Schedule" />
+            <NavBtn id="projects" label="Projects" />
             <NavBtn id="staff" label="Staff" />
             <LecturesMenu onSelect={setPage} />
           </nav>
@@ -540,6 +543,8 @@ export default function App() {
           <ScheduleCards apiKey={API_KEY} sheetId={SHEET_ID} tabName={TAB_NAME} />
         </Section>
       )}
+
+      {page === "projects" && <ProjectsPage />}
 
       {page === "staff" && <StaffPage />}
 
