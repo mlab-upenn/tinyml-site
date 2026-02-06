@@ -5,3 +5,9 @@ html, body, #root {
   width: 100%;
   overflow-x: hidden;
 }
+.theme-fab {
+  position: fixed !important;
+  right: 16px !important;
+  bottom: 16px !important;
+  z-index: 999999 !important;
+}
