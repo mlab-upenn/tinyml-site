@@ -1,5 +1,6 @@
 // src/App.jsx
 import React from "react";
+import ReactDOM from "react-dom";
 import SyllabusPage from "./SyllabusPageHardcoded.jsx";
 import Lectures from "./LecturesPage.jsx";
 import StaffPage from "./StaffPage.jsx"; 
@@ -437,15 +438,22 @@ function Section({ title, eyebrow, children }) {
 
 function ThemeFAB({ theme, onToggle }) {
   const label = theme === "dark" ? "Light" : "Dark";
-  return (
+  return ReactDOM.createPortal(
     <button
       onClick={onToggle}
       aria-label={`Switch to ${label} mode`}
-      className="theme-fab px-3 py-2 rounded-full text-sm border bg-white text-slate-800 shadow-lg shadow-black/20
-             dark:bg-slate-800 dark:text-white dark:border-white/15 border-black/10"
+      style={{
+        position: "fixed",
+        right: 16,
+        bottom: 16,
+        zIndex: 2147483647, // max z-index so it never hides
+      }}
+      className="px-3 py-2 rounded-full text-sm border bg-white text-slate-800 shadow-lg shadow-black/20
+                 dark:bg-slate-800 dark:text-white dark:border-white/15 border-black/10"
     >
       {label}
     </button>
+    document.body
   );
 }
 
