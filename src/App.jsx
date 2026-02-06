@@ -462,55 +462,46 @@ function ThemeFAB({ theme, onToggle }) {
 function LecturesMenu({ onSelect }) {
   const [open, setOpen] = React.useState(false);
   const btnRef = React.useRef(null);
+  const menuRef = React.useRef(null);
 
-  // store where to place the dropdown on screen
   const [pos, setPos] = React.useState({ top: 0, left: 0 });
 
-  // open + compute position
   function toggleOpen() {
     setOpen((v) => !v);
-    // wait a tick so layout is stable
+
     requestAnimationFrame(() => {
       const el = btnRef.current;
       if (!el) return;
       const r = el.getBoundingClientRect();
 
-      const menuWidth = 200; // ~ w-48 / w-50
+      const menuWidth = 200;
       const padding = 12;
 
-      let left = r.right - menuWidth; // align right edge with button
+      let left = r.right - menuWidth;
       left = Math.max(padding, Math.min(left, window.innerWidth - menuWidth - padding));
 
-      setPos({
-        top: r.bottom + 8,
-        left,
-      });
+      setPos({ top: r.bottom + 8, left });
     });
   }
 
   function go(moduleId) {
-    // 1) go to lectures page first
     onSelect("lectures");
     setOpen(false);
-  
-    // 2) after the page renders, scroll to the module
+
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const el = document.getElementById(moduleId);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-        else window.location.hash = `#${moduleId}`; // fallback if id not found
-      });
+      window.location.hash = `#${moduleId}`;
     });
   }
 
-
-  // close on outside tap + on scroll (mobile especially)
   React.useEffect(() => {
     if (!open) return;
 
     function onPointerDown(e) {
-      const el = btnRef.current;
-      if (el && el.contains(e.target)) return; // clicked the button
+      const btn = btnRef.current;
+      const menu = menuRef.current;
+
+      if ((btn && btn.contains(e.target)) || (menu && menu.contains(e.target))) return;
+
       setOpen(false);
     }
 
@@ -536,8 +527,6 @@ function LecturesMenu({ onSelect }) {
         onClick={toggleOpen}
         className="shrink-0 rounded-xl px-3 py-2 text-sm transition border border-black/10 bg-black/5 text-slate-700 hover:text-slate-900
                    dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:text-white"
-        aria-haspopup="menu"
-        aria-expanded={open ? "true" : "false"}
       >
         Lectures
       </button>
@@ -545,7 +534,7 @@ function LecturesMenu({ onSelect }) {
       {open &&
         ReactDOM.createPortal(
           <div
-            role="menu"
+            ref={menuRef}
             style={{
               position: "fixed",
               top: pos.top,
@@ -556,25 +545,13 @@ function LecturesMenu({ onSelect }) {
             className="rounded-xl border bg-white text-slate-900 shadow-lg border-black/10
                        dark:bg-slate-800 dark:text-white dark:border-white/15"
           >
-            <button
-              role="menuitem"
-              onClick={() => go("module1")}
-              className="w-full text-left px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/10 rounded-xl"
-            >
+            <button onClick={() => go("module1")} className="w-full text-left px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/10 rounded-xl">
               Module 1
             </button>
-            <button
-              role="menuitem"
-              onClick={() => go("module2")}
-              className="w-full text-left px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/10 rounded-xl"
-            >
+            <button onClick={() => go("module2")} className="w-full text-left px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/10 rounded-xl">
               Module 2
             </button>
-            <button
-              role="menuitem"
-              onClick={() => go("module3")}
-              className="w-full text-left px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/10 rounded-xl"
-            >
+            <button onClick={() => go("module3")} className="w-full text-left px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/10 rounded-xl">
               Module 3
             </button>
           </div>,
@@ -583,6 +560,7 @@ function LecturesMenu({ onSelect }) {
     </div>
   );
 }
+
 
 /*
 function LecturesMenu({ onSelect }) {
