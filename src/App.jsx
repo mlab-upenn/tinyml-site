@@ -620,30 +620,32 @@ export default function App() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
       <header className="sticky top-0 z-10 overflow-visible border-b border-black/10 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-900/80">
-        <div className="mx-auto grid max-w-6xl grid-cols-[auto,1fr,auto] items-center gap-3 px-4 py-3">
-          {/* LEFT: logo */}
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-xl bg-emerald-500/15 ring-1 ring-emerald-400/40" />
-            <span className="font-semibold">TinyML @ Penn</span>
-          </div>
+      <div className="mx-auto max-w-6xl px-4 py-3
+                      flex flex-col gap-3
+                      sm:grid sm:grid-cols-[auto,1fr,auto] sm:items-center sm:gap-3">
       
-          {/* CENTER: nav */}
-          <nav className="flex items-center justify-center gap-2 overflow-x-auto overflow-y-visible whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <NavBtn id="home" label="Home" />
-            <NavBtn id="schedule" label="Schedule" />
-            <NavBtn id="projects" label="Projects" />
-            <NavBtn id="staff" label="Staff" />
-            <LecturesMenu onSelect={setPage} />
-          </nav>
-      
-          {/* RIGHT: spacer (balances logo width so nav is truly centered) */}
-          <div className="opacity-0 pointer-events-none select-none">
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8" />
-              <span className="font-semibold">TinyML @ Penn</span>
-            </div>
-          </div>
+        {/* Left: logo */}
+        <div className="flex items-center gap-3 sm:justify-self-start">
+          <div className="h-8 w-8 rounded-xl bg-emerald-500/15 ring-1 ring-emerald-400/40" />
+          <span className="font-semibold">TinyML @ Penn</span>
         </div>
+      
+        {/* Middle: nav (full width on mobile, centered on laptop) */}
+        <nav className="min-w-0 flex items-center gap-2
+                        overflow-x-auto whitespace-nowrap
+                        [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+                        sm:justify-self-center">
+          <NavBtn id="home" label="Home" />
+          <NavBtn id="schedule" label="Schedule" />
+          <NavBtn id="projects" label="Projects" />
+          <NavBtn id="staff" label="Staff" />
+          <LecturesMenu onSelect={setPage} />
+        </nav>
+      
+        {/* Right spacer so the nav is truly centered on laptop */}
+        <div className="hidden sm:block" />
+      </div>
+
       </header>
       {page === "home" && (
       <Section eyebrow="Policies & Plan" title="Home">
