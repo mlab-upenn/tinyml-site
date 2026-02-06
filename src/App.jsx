@@ -493,7 +493,7 @@ function LecturesMenu({ onSelect }) {
 
 /* 5) MAIN APP */
 export default function App() {
-  const [page, setPage] = React.useState("schedule");
+  const [page, setPage] = React.useState("home");
   const { theme, toggle } = useTheme();
   const NavBtn = ({ id, label }) => (
     <button
@@ -517,21 +517,16 @@ export default function App() {
           </div>
           <nav className="flex items-center gap-2">
             <NavBtn id="home" label="Home" />
-            <NavBtn id="schedule" label="Schedule" />
             <NavBtn id="staff" label="Staff" />
-            <NavBtn id="syllabus" label="Syllabus" />
             <LecturesMenu onSelect={setPage} />
           </nav>
         </div>
       </header>
 
       {page === "home" && (
-        <main className="grid place-items-center px-4 py-24">
-          <div className="text-center max-w-2xl">
-            <h1 className="text-5xl font-bold text-emerald-600 dark:text-emerald-400">Tiny Machine Learning</h1>
-            <p className="mt-4 text-slate-700 dark:text-white/70">Build embedded ML systems on microcontrollers—from sensing to models to deployment.</p>
-          </div>
-        </main>
+      <Section eyebrow="Policies & Plan" title="Home">
+        <SyllabusPage />
+      </Section>
       )}
 
       {page === "schedule" && (
@@ -540,13 +535,7 @@ export default function App() {
         </Section>
       )}
 
-      {page === "staff" && <StaffPage />}{/* ⬅️ USE YOUR PAGE HERE */}
-
-      {page === "syllabus" && (
-        <Section eyebrow="Policies & Plan" title="Syllabus">
-          <SyllabusPage />
-        </Section>
-      )}
+      {page === "staff" && <StaffPage />}{}
 
       {page === "lectures" && <Lectures />}
 
