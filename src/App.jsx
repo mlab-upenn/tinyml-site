@@ -642,7 +642,9 @@ export default function App() {
       )}
 
       {page === "schedule" && (
-        <Section eyebrow="Fall 2025" title="Course Schedule">
+        <Section
+  eyebrow={`Fall ${new Date().getFullYear()}`}
+  title="Course Schedule">
           <ScheduleCards apiKey={API_KEY} sheetId={SHEET_ID} tabName={TAB_NAME} />
         </Section>
       )}
