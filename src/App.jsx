@@ -516,7 +516,7 @@ export default function App() {
   );
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
-      <header className="sticky top-0 z-10 border-b border-black/10 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-900/80">
+      <header className="sticky top-0 z-10 overflow-visible border-b border-black/10 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-900/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="h-8 w-8 rounded-xl bg-emerald-500/15 ring-1 ring-emerald-400/40" />
