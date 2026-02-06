@@ -452,7 +452,7 @@ function ThemeFAB({ theme, onToggle }) {
                  dark:bg-slate-800 dark:text-white dark:border-white/15 border-black/10"
     >
       {label}
-    </button>
+    </button>,
     document.body
   );
 }
@@ -541,7 +541,7 @@ export default function App() {
         </Section>
       )}
 
-      {page === "staff" && <StaffPage />}{}
+      {page === "staff" && <StaffPage />}
 
       {page === "lectures" && <Lectures />}
 
