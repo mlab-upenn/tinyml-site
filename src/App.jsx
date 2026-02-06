@@ -517,6 +517,7 @@ export default function App() {
           </div>
           <nav className="flex items-center gap-2">
             <NavBtn id="home" label="Home" />
+            <NavBtn id="schedule" label="Schedule" />
             <NavBtn id="staff" label="Staff" />
             <LecturesMenu onSelect={setPage} />
           </nav>
