@@ -441,11 +441,8 @@ function ThemeFAB({ theme, onToggle }) {
     <button
       onClick={onToggle}
       aria-label={`Switch to ${label} mode`}
-      className="fixed z-[9999] px-3 py-2 rounded-full text-sm border bg-white text-slate-800 shadow-lg shadow-black/20
-                 dark:bg-slate-800 dark:text-white dark:border-white/15
-                 right-4
-                 bottom-4
-                 border-black/10 dark:border-white/15"
+      className="fixed z-[9999] bottom-4 right-4 px-3 py-2 rounded-full text-sm border border-black/10 bg-white text-slate-800 shadow-lg shadow-black/20
+                 dark:bg-slate-800 dark:text-white dark:border-white/15"
     >
       {label}
     </button>
@@ -508,7 +505,7 @@ export default function App() {
     </button>
   );
   return (
-    <div className="relative min-h-screen bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
       <header className="sticky top-0 z-10 border-b border-black/10 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-900/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
