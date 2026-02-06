@@ -480,7 +480,7 @@ function LecturesMenu({ onSelect }) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="rounded-xl px-3 py-2 text-sm transition border border-black/10 bg-black/5 text-slate-700 hover:text-slate-900
+        className="shrink-0 rounded-xl px-3 py-2 text-sm transition border border-black/10 bg-black/5 text-slate-700 hover:text-slate-900
                    dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:text-white"
         aria-haspopup="menu" aria-expanded={open ? "true" : "false"}
       >
@@ -505,7 +505,7 @@ export default function App() {
   const NavBtn = ({ id, label }) => (
     <button
       onClick={() => setPage(id)}
-      className={`rounded-xl px-3 py-2 text-sm transition border ${
+      className={`shrink-0 rounded-xl px-3 py-2 text-sm transition border ${
         page === id
           ? "border-black/20 bg-black/10 text-slate-900 dark:border-white/40 dark:bg-white/15 dark:text-white"
           : "border-black/10 bg-black/5 text-slate-700 hover:text-slate-900 dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:text-white"
@@ -522,7 +522,7 @@ export default function App() {
             <div className="h-8 w-8 rounded-xl bg-emerald-500/15 ring-1 ring-emerald-400/40" />
             <span className="font-semibold">TinyML @ Penn</span>
           </div>
-          <nav className="flex items-center gap-2">
+          <nav className="flex items-center gap-2 overflow-x-auto whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <NavBtn id="home" label="Home" />
             <NavBtn id="schedule" label="Schedule" />
             <NavBtn id="projects" label="Projects" />
