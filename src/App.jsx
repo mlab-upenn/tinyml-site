@@ -459,7 +459,122 @@ function ThemeFAB({ theme, onToggle }) {
   );
 }
 
-/* 4.5) LECTURES DROPDOWN (Modules) */
+function LecturesMenu({ onSelect }) {
+  const [open, setOpen] = React.useState(false);
+  const btnRef = React.useRef(null);
+
+  // store where to place the dropdown on screen
+  const [pos, setPos] = React.useState({ top: 0, left: 0 });
+
+  // open + compute position
+  function toggleOpen() {
+    setOpen((v) => !v);
+    // wait a tick so layout is stable
+    requestAnimationFrame(() => {
+      const el = btnRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+
+      const menuWidth = 200; // ~ w-48 / w-50
+      const padding = 12;
+
+      let left = r.right - menuWidth; // align right edge with button
+      left = Math.max(padding, Math.min(left, window.innerWidth - menuWidth - padding));
+
+      setPos({
+        top: r.bottom + 8,
+        left,
+      });
+    });
+  }
+
+  function go(moduleId) {
+    window.location.hash = `#${moduleId}`;
+    onSelect("lectures");
+    setOpen(false);
+  }
+
+  // close on outside tap + on scroll (mobile especially)
+  React.useEffect(() => {
+    if (!open) return;
+
+    function onPointerDown(e) {
+      const el = btnRef.current;
+      if (el && el.contains(e.target)) return; // clicked the button
+      setOpen(false);
+    }
+
+    function onScroll() {
+      setOpen(false);
+    }
+
+    window.addEventListener("pointerdown", onPointerDown, { capture: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    return () => {
+      window.removeEventListener("pointerdown", onPointerDown, { capture: true });
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [open]);
+
+  return (
+    <div className="relative">
+      <button
+        ref={btnRef}
+        onClick={toggleOpen}
+        className="shrink-0 rounded-xl px-3 py-2 text-sm transition border border-black/10 bg-black/5 text-slate-700 hover:text-slate-900
+                   dark:border-white/10 dark:bg-white/5 dark:text-white/70 dark:hover:text-white"
+        aria-haspopup="menu"
+        aria-expanded={open ? "true" : "false"}
+      >
+        Lectures
+      </button>
+
+      {open &&
+        ReactDOM.createPortal(
+          <div
+            role="menu"
+            style={{
+              position: "fixed",
+              top: pos.top,
+              left: pos.left,
+              width: 200,
+              zIndex: 2147483647,
+            }}
+            className="rounded-xl border bg-white text-slate-900 shadow-lg border-black/10
+                       dark:bg-slate-800 dark:text-white dark:border-white/15"
+          >
+            <button
+              role="menuitem"
+              onClick={() => go("module1")}
+              className="w-full text-left px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/10 rounded-xl"
+            >
+              Module 1
+            </button>
+            <button
+              role="menuitem"
+              onClick={() => go("module2")}
+              className="w-full text-left px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/10 rounded-xl"
+            >
+              Module 2
+            </button>
+            <button
+              role="menuitem"
+              onClick={() => go("module3")}
+              className="w-full text-left px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/10 rounded-xl"
+            >
+              Module 3
+            </button>
+          </div>,
+          document.body
+        )}
+    </div>
+  );
+}
+
+/*
 function LecturesMenu({ onSelect }) {
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef(null);
@@ -497,7 +612,7 @@ function LecturesMenu({ onSelect }) {
     </div>
   );
 }
-
+*/
 /* 5) MAIN APP */
 export default function App() {
   const [page, setPage] = React.useState("home");
