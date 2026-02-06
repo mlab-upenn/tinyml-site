@@ -42,6 +42,47 @@ function YouTubeEmbed({ url }) {
     </div>
   );
 }
+/** Vertical embed for YouTube Shorts (phone style) */
+function YouTubeShortEmbed({ url }) {
+  let embed = url;
+
+  try {
+    const u = new URL(url);
+
+    // youtu.be/<id>
+    if (u.hostname.includes("youtu.be")) {
+      const id = u.pathname.replace("/", "");
+      embed = `https://www.youtube.com/embed/${id}`;
+    }
+
+    // youtube.com/watch?v=<id>
+    if (u.hostname.includes("youtube.com") && u.pathname === "/watch") {
+      const id = u.searchParams.get("v");
+      if (id) embed = `https://www.youtube.com/embed/${id}`;
+    }
+
+    // youtube.com/shorts/<id>
+    if (u.hostname.includes("youtube.com") && u.pathname.startsWith("/shorts/")) {
+      const id = u.pathname.split("/shorts/")[1]?.split("/")[0];
+      if (id) embed = `https://www.youtube.com/embed/${id}`;
+    }
+  } catch {}
+
+  return (
+    <div
+      className="mx-auto w-full max-w-[260px] overflow-hidden rounded-2xl border border-black/10 bg-black/5 dark:border-white/10 dark:bg-white/5"
+      style={{ aspectRatio: "9 / 16" }}
+    >
+      <iframe
+        className="h-full w-full"
+        src={embed}
+        title="Short video"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+      />
+    </div>
+  );
+}
 
 function Card({ title, subtitle, children, links = [] }) {
   return (
@@ -116,23 +157,49 @@ export default function ProjectsPage() {
         >
           <YouTubeEmbed url="https://www.youtube.com/watch?v=e5NfGWAu06Q" />
         </Card>
-
         <Card
           title="Real-Time Gaze Tracking"
           subtitle="Riju Datta"
-          links={[
-            { label: "Up direction", href: "https://youtube.com/shorts/tlFbsTMf3QI" },
-            { label: "Right direction", href: "https://youtube.com/shorts/d0XcqP7OmrA" },
-            { label: "Left direction", href: "https://youtube.com/shorts/6IStzLdUOYM" },
-          ]}
         >
-          {/* one row: 3 embeds */}
-          <div className="grid gap-4 sm:grid-cols-3">
-            <YouTubeEmbed url="https://youtube.com/shorts/tlFbsTMf3QI" />
-            <YouTubeEmbed url="https://youtube.com/shorts/d0XcqP7OmrA" />
-            <YouTubeEmbed url="https://youtube.com/shorts/6IStzLdUOYM" />
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="space-y-2 text-center">
+              <YouTubeShortEmbed url="https://youtube.com/shorts/tlFbsTMf3QI" />
+              <a
+                href="https://youtube.com/shorts/tlFbsTMf3QI"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:hover:text-white"
+              >
+                Up direction
+              </a>
+            </div>
+        
+            <div className="space-y-2 text-center">
+              <YouTubeShortEmbed url="https://youtube.com/shorts/d0XcqP7OmrA" />
+              <a
+                href="https://youtube.com/shorts/d0XcqP7OmrA"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:hover:text-white"
+              >
+                Right direction
+              </a>
+            </div>
+        
+            <div className="space-y-2 text-center">
+              <YouTubeShortEmbed url="https://youtube.com/shorts/6IStzLdUOYM" />
+              <a
+                href="https://youtube.com/shorts/6IStzLdUOYM"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm underline decoration-slate-400/50 underline-offset-2 hover:text-slate-900 dark:hover:text-white"
+              >
+                Left direction
+              </a>
+            </div>
           </div>
         </Card>
+
       </div>
 
       {/* Slides embed */}
