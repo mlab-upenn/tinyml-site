@@ -522,7 +522,7 @@ export default function App() {
             <div className="h-8 w-8 rounded-xl bg-emerald-500/15 ring-1 ring-emerald-400/40" />
             <span className="font-semibold">TinyML @ Penn</span>
           </div>
-          <nav className="flex items-center gap-2 overflow-x-auto whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <nav className="flex flex-1 items-center gap-2 overflow-x-auto overflow-y-visible whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <NavBtn id="home" label="Home" />
             <NavBtn id="schedule" label="Schedule" />
             <NavBtn id="projects" label="Projects" />
