@@ -441,8 +441,8 @@ function ThemeFAB({ theme, onToggle }) {
     <button
       onClick={onToggle}
       aria-label={`Switch to ${label} mode`}
-      className="fixed z-[9999] bottom-4 right-4 px-3 py-2 rounded-full text-sm border border-black/10 bg-white text-slate-800 shadow-lg shadow-black/20
-                 dark:bg-slate-800 dark:text-white dark:border-white/15"
+      className="theme-fab px-3 py-2 rounded-full text-sm border bg-white text-slate-800 shadow-lg shadow-black/20
+             dark:bg-slate-800 dark:text-white dark:border-white/15 border-black/10"
     >
       {label}
     </button>
