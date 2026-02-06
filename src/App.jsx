@@ -489,10 +489,20 @@ function LecturesMenu({ onSelect }) {
   }
 
   function go(moduleId) {
-    window.location.hash = `#${moduleId}`;
+    // 1) go to lectures page first
     onSelect("lectures");
     setOpen(false);
+  
+    // 2) after the page renders, scroll to the module
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const el = document.getElementById(moduleId);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        else window.location.hash = `#${moduleId}`; // fallback if id not found
+      });
+    });
   }
+
 
   // close on outside tap + on scroll (mobile especially)
   React.useEffect(() => {
