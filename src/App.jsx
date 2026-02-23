@@ -268,6 +268,17 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
             const assignment = get(r, "Assignment");
             const quizzes    = get(r, "Quizzes");
 
+            // Read Image column — handles plain text URLs and hyperlinked cells
+            const rawImageCell = get(r, "Image") || "";
+            const hrefMatch = rawImageCell.match(/href="([^"]+)"/);
+            const rawImage = (hrefMatch ? hrefMatch[1] : stripHtml(rawImageCell)).trim();
+            const moduleImage = rawImage
+              ? rawImage.replace(
+                  /https:\/\/drive\.google\.com\/file\/d\/([^/]+)\/.*/,
+                  "https://drive.google.com/uc?export=view&id=$1"
+                )
+              : "";
+
             const moduleCombined = r._moduleCombined || "";
 
             // Decide which module this row belongs to (handles "Part 1" / "Part I", etc.)
@@ -297,10 +308,25 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
               <article
                 key={i}
                 className={`
-                  rounded-2xl border p-6 text-[15px] leading-6 shadow-sm shadow-black/5
+                  rounded-2xl border text-[15px] leading-6 shadow-sm shadow-black/5 overflow-hidden
+                  ${moduleImage ? "flex" : ""}
                   ${cardClass}
                 `}
               >
+                {/* Left image strip — full card height, no stretch, crops sides */}
+                {moduleImage && (
+                  <div className="w-[72px] flex-shrink-0 relative">
+                    <img
+                      src={moduleImage}
+                      alt={lecture ? lecture.replace(/<[^>]+>/g, "") : "module"}
+                      className="absolute inset-0 w-full h-full object-cover object-center"
+                    />
+                  </div>
+                )}
+
+                {/* Card content */}
+                <div className={`${moduleImage ? "flex-1 min-w-0" : ""} p-6`}>
+
                 {/* Top row: title + chip + date */}
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <div className="flex items-center gap-3">
@@ -412,6 +438,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
                     )}
                   </div>
                 </div>
+                </div>{/* end card content */}
               </article>
             );
           })}
