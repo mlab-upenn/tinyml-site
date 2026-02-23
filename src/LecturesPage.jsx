@@ -287,14 +287,12 @@ function LectureViewer({ title, url }) {
 export default function Lectures() {
   const boot = readHash();
 
-  const [moduleId, setModuleId] = React.useState(
-    MODULES.find(m => m.id === boot.moduleId)?.id || MODULES[0].id
-  );
+  const [moduleId, setModuleId] = React.useState("module1");
 
   const activeModule = MODULES.find(m => m.id === moduleId) || MODULES[0];
 
   const [lectureId, setLectureId] = React.useState(
-    activeModule.lectures.find(l => l.id === boot.lectureId)?.id || activeModule.lectures[0]?.id
+    activeModule.lectures.find(l => l.id === boot.lectureId)?.id || "lec1"
   );
 
   // keep hash synced
