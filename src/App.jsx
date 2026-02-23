@@ -315,7 +315,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
               >
                 {/* Left image strip — full card height, no stretch, crops sides */}
                 {moduleImage && (
-                  <div className="w-[72px] flex-shrink-0 relative">
+                  <div className="w-[120px] flex-shrink-0 relative min-h-[120px]">
                     <img
                       src={moduleImage}
                       alt={lecture ? lecture.replace(/<[^>]+>/g, "") : "module"}
