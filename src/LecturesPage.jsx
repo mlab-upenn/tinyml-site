@@ -1,7 +1,7 @@
 // src/Lectures.jsx
 import React from "react";
 
-/* 0) CONFIG: Modules → Lectures → RTD URLs */
+/* 0) CONFIG */
 const MODULES = [
   {
     id: "module1",
@@ -43,7 +43,10 @@ const MODULES = [
   },
 ];
 
-/* 1) URL-hash helpers (#moduleId/lectureId) */
+const DRIVE_API_KEY = "AIzaSyCjjW3RjE6y026TTk3qLXDEs-i6RWor30g";
+const TUTORIALS_FOLDER_ID = "1J1vvma5Dt2wcpESZKSrANoH9gW34Otmb";
+
+/* 1) URL-hash helpers */
 function readHash() {
   const h = (window.location.hash || "").replace(/^#/, "");
   const [moduleId, lectureId] = h.split("/");
@@ -54,7 +57,21 @@ function writeHash(moduleId, lectureId) {
   if (window.location.hash !== next) window.location.hash = next;
 }
 
-/* 2) Fetch + sanitize RTD page */
+/* 2) Fetch tutorials from Drive folder */
+function useTutorials() {
+  const [tutorials, setTutorials] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState("");
+  React.useEffect(() => {
+    fetch(`https://www.googleapis.com/drive/v3/files?q='${TUTORIALS_FOLDER_ID}'+in+parents+and+trashed=false&fields=files(id,name,webViewLink,mimeType)&orderBy=name&key=${DRIVE_API_KEY}`)
+      .then(r => r.json())
+      .then(data => { setTutorials(data.files || []); setLoading(false); })
+      .catch(e => { setError(String(e)); setLoading(false); });
+  }, []);
+  return { tutorials, loading, error };
+}
+
+/* 3) Fetch + sanitize RTD page */
 function useRtdPage(url) {
   const [html, setHtml] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -63,7 +80,7 @@ function useRtdPage(url) {
   React.useEffect(() => {
     if (!url) { setHtml(""); setError(""); setLoading(false); return; }
     let alive = true;
-    const bust = `?v=${Math.floor(Date.now() / (5 * 60 * 1000))}`; // 5-min cache bust
+    const bust = `?v=${Math.floor(Date.now() / (5 * 60 * 1000))}`;
     setLoading(true);
     fetch(url + bust, { cache: "no-store", credentials: "omit", mode: "cors" })
       .then(r => { if (!r.ok) throw new Error(`Fetch ${r.status}`); return r.text(); })
@@ -84,12 +101,10 @@ function sanitizeRtdHTML(rawHtml) {
     doc.querySelector(".document") ||
     doc.body;
 
-  // Remove RTD chrome / extras
   main.querySelectorAll("nav,header,footer,.sphinxsidebar,.wy-nav-side,.toc,.related").forEach(n => n.remove());
   main.querySelectorAll("a.headerlink,[title^='Permalink']").forEach(n => n.remove());
   main.querySelectorAll("script,style").forEach(n => n.remove());
 
-  // Allowlist filter
   const ALLOW = new Set("section article p br strong b em u s span h1 h2 h3 h4 h5 h6 ul ol li a img blockquote hr table thead tbody tr th td pre code figure figcaption div iframe".split(" "));
   const ALLOW_ATTR = new Set("href src alt title colspan rowspan allow allowfullscreen frameborder loading referrerpolicy width height".split(" "));
   const walker = doc.createTreeWalker(main, NodeFilter.SHOW_ELEMENT);
@@ -101,7 +116,6 @@ function sanitizeRtdHTML(rawHtml) {
   }
   rm.forEach(n => n.replaceWith(...n.childNodes));
 
-  // Tailwindish classes
   main.querySelectorAll("h1").forEach(h => h.className = "text-3xl font-semibold mt-6 mb-3 text-slate-900 dark:text-white");
   main.querySelectorAll("h2").forEach(h => h.className = "text-2xl font-semibold mt-6 mb-3 text-slate-900 dark:text-white");
   main.querySelectorAll("h3").forEach(h => h.className = "text-xl font-bold mt-5 mb-2.5 text-slate-900 dark:text-white");
@@ -120,7 +134,6 @@ function sanitizeRtdHTML(rawHtml) {
   });
   main.querySelectorAll("img[src]").forEach(img => img.className = "max-w-full h-auto rounded-xl border border-black/10 dark:border-white/10 my-3");
 
-  // Responsive YouTube iframes
   main.querySelectorAll("iframe[src*='youtube.com'],iframe[src*='youtu.be']").forEach(ifr => {
     const wrap = doc.createElement("div");
     wrap.className = "relative w-full overflow-hidden rounded-xl border border-black/10 dark:border-white/10 my-4";
@@ -151,7 +164,7 @@ function sanitizeRtdHTML(rawHtml) {
   return container.innerHTML;
 }
 
-/* 3) UI bits */
+/* 4) UI components */
 function Section({ title, eyebrow, children }) {
   return (
     <section className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -164,44 +177,21 @@ function Section({ title, eyebrow, children }) {
   );
 }
 
-
-
 function ModulePicker({ modules, currentId, onPick }) {
-  // To get module IDs: 1,2,3
-  const getModuleNum = (id) => {
-    const match = id.match(/\d+/);
-    return match ? parseInt(match[0]) : 1;
-  };
-
+  const getModuleNum = (id) => { const match = id.match(/\d+/); return match ? parseInt(match[0]) : 1; };
   const COLOR = {
-    1: {
-      base: "bg-[#F2FCF7] border-[#D2F1E4] text-slate-700",
-      active: "bg-[#DFF7EC] border-[#81D7B5] text-slate-900",
-    },
-    2: {
-      base: "bg-[#E6F7EC] border-[#C8EBDD] text-slate-700",
-      active: "bg-[#CFF0DF] border-[#75CDA5] text-slate-900",
-    },
-    3: {
-      base: "bg-[#D8F2E2] border-[#B6E1CB] text-slate-700",
-      active: "bg-[#BFE9D2] border-[#5FC598] text-slate-900",
-    },
+    1: { base: "bg-[#F2FCF7] border-[#D2F1E4] text-slate-700", active: "bg-[#DFF7EC] border-[#81D7B5] text-slate-900" },
+    2: { base: "bg-[#E6F7EC] border-[#C8EBDD] text-slate-700", active: "bg-[#CFF0DF] border-[#75CDA5] text-slate-900" },
+    3: { base: "bg-[#D8F2E2] border-[#B6E1CB] text-slate-700", active: "bg-[#BFE9D2] border-[#5FC598] text-slate-900" },
   };
-
   return (
     <div className="flex flex-wrap gap-2">
       {modules.map((m) => {
         const num = getModuleNum(m.id);
         const palette = COLOR[num];
-
         return (
-          <button
-            key={m.id}
-            onClick={() => onPick(m.id)}
-            className={`rounded-xl px-4 py-1.5 text-sm border transition
-              ${currentId === m.id ? palette.active : palette.base}
-            `}
-          >
+          <button key={m.id} onClick={() => onPick(m.id)}
+            className={`rounded-xl px-4 py-1.5 text-sm border transition ${currentId === m.id ? palette.active : palette.base}`}>
             {m.title}
           </button>
         );
@@ -211,63 +201,37 @@ function ModulePicker({ modules, currentId, onPick }) {
 }
 
 function LecturesGrid({ lectures, onOpen, currentLectureId, moduleId }) {
-  // Detect module number from moduleId --> 1, 2, or 3
   const match = moduleId.match(/\d+/);
   const num = match ? parseInt(match[0]) : 1;
-
   const COLOR = {
-    1: {
-      base: "bg-[#F2FCF7] border-[#D2F1E4]",
-      active: "bg-[#DFF7EC] border-[#81D7B5]",
-    },
-    2: {
-      base: "bg-[#E6F7EC] border-[#C8EBDD]",
-      active: "bg-[#CFF0DF] border-[#75CDA5]",
-    },
-    3: {
-      base: "bg-[#D8F2E2] border-[#B6E1CB]",
-      active: "bg-[#BFE9D2] border-[#5FC598]",
-    },
+    1: { base: "bg-[#F2FCF7] border-[#D2F1E4]", active: "bg-[#DFF7EC] border-[#81D7B5]" },
+    2: { base: "bg-[#E6F7EC] border-[#C8EBDD]", active: "bg-[#CFF0DF] border-[#75CDA5]" },
+    3: { base: "bg-[#D8F2E2] border-[#B6E1CB]", active: "bg-[#BFE9D2] border-[#5FC598]" },
   };
-
   const color = COLOR[num] || COLOR[1];
-
   return (
     <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
       {lectures.map(lec => (
-        <button
-          key={lec.id}
-          onClick={() => onOpen(lec.id)}
-          className={`rounded-xl p-4 text-left border transition
-            ${currentLectureId === lec.id ? color.active : color.base}
-          `}
-        >
-          <div className="text-sm text-slate-600">
-            {lec.id.replace(/^lec/i, "Lecture ")}
-          </div>
-          <div className="mt-1 font-semibold text-slate-900">
-            {lec.title}
-          </div>
+        <button key={lec.id} onClick={() => onOpen(lec.id)}
+          className={`rounded-xl p-4 text-left border transition ${currentLectureId === lec.id ? color.active : color.base}`}>
+          <div className="text-sm text-slate-600">{lec.id.replace(/^lec/i, "Lecture ")}</div>
+          <div className="mt-1 font-semibold text-slate-900">{lec.title}</div>
         </button>
       ))}
     </div>
   );
 }
 
-
-
 function LectureViewer({ title, url }) {
   const { html, loading, error } = useRtdPage(url);
-
   if (!url) {
     return (
       <div className="mt-8 rounded-xl border border-black/10 bg-black/5 p-6 text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-white/80">
-        This lecture’s Read-the-Docs link isn’t set yet. Add a <code>url</code> in <code>MODULES</code>.
+        This lecture's Read-the-Docs link isn't set yet. Add a <code>url</code> in <code>MODULES</code>.
       </div>
     );
   }
-  if (loading) return <div className="mt-8 text-slate-600 dark:text-white/70">Loading “{title}”…</div>;
-
+  if (loading) return <div className="mt-8 text-slate-600 dark:text-white/70">Loading "{title}"…</div>;
   if (error || !html) {
     return (
       <div className="mt-8 rounded-xl overflow-hidden border border-black/10 dark:border-white/10">
@@ -275,7 +239,6 @@ function LectureViewer({ title, url }) {
       </div>
     );
   }
-
   return (
     <div className="mt-8 mx-auto w-full max-w-5xl">
       <article className="prose prose-slate max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: html }} />
@@ -283,22 +246,36 @@ function LectureViewer({ title, url }) {
   );
 }
 
-/* 4) Page component */
+function TutorialsTab() {
+  const { tutorials, loading, error } = useTutorials();
+  if (loading) return <div className="mt-8 text-slate-600 dark:text-white/70">Loading tutorials…</div>;
+  if (error) return <div className="mt-8 text-rose-600">Error: {error}</div>;
+  if (!tutorials.length) return <div className="mt-8 text-slate-600 dark:text-white/70">No tutorials yet — add a doc to the Drive folder and it will appear here.</div>;
+  return (
+    <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+      {tutorials.map(t => (
+        <a key={t.id} href={t.webViewLink} target="_blank" rel="noreferrer"
+          className="rounded-xl p-4 border border-[#D2F1E4] bg-[#F2FCF7] hover:bg-[#DFF7EC] transition block">
+          <div className="text-xs uppercase tracking-wide text-slate-500 mb-1">Tutorial</div>
+          <div className="font-semibold text-slate-900">{t.name}</div>
+        </a>
+      ))}
+    </div>
+  );
+}
+
+/* 5) Page component */
 export default function Lectures() {
   const boot = readHash();
-
+  const [tab, setTab] = React.useState("lectures");
   const [moduleId, setModuleId] = React.useState("module1");
-
   const activeModule = MODULES.find(m => m.id === moduleId) || MODULES[0];
-
   const [lectureId, setLectureId] = React.useState(
     activeModule.lectures.find(l => l.id === boot.lectureId)?.id || "lec1"
   );
 
-  // keep hash synced
   React.useEffect(() => { writeHash(moduleId, lectureId); }, [moduleId, lectureId]);
 
-  // react to browser back/forward
   React.useEffect(() => {
     function onHash() {
       const h = readHash();
@@ -309,14 +286,12 @@ export default function Lectures() {
     return () => window.removeEventListener("hashchange", onHash);
   }, [moduleId, lectureId]);
 
-  // when module changes, default to its first lecture if current not present
   React.useEffect(() => {
     const mod = MODULES.find(m => m.id === moduleId);
     if (!mod) return;
     if (!mod.lectures.some(l => l.id === lectureId)) setLectureId(mod.lectures[0]?.id);
   }, [moduleId]); // eslint-disable-line
 
-  // scroll to top on lecture change
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [lectureId]);
@@ -324,10 +299,26 @@ export default function Lectures() {
   const currentLecture = activeModule.lectures.find(l => l.id === lectureId);
 
   return (
-    <Section eyebrow="Pick a Module" title="Lectures">
-      <ModulePicker modules={MODULES} currentId={moduleId} onPick={id => setModuleId(id)} />
-      <LecturesGrid lectures={activeModule.lectures} onOpen={id => setLectureId(id)} currentLectureId={lectureId} moduleId={activeModule.id} />
-      {currentLecture && <LectureViewer title={currentLecture.title} url={currentLecture.url} />}
+    <Section eyebrow="Course Content" title="Lectures">
+      {/* Tab switcher */}
+      <div className="flex gap-2 mb-6">
+        <button onClick={() => setTab("lectures")}
+          className={`rounded-xl px-4 py-1.5 text-sm border transition ${tab === "lectures" ? "bg-[#DFF7EC] border-[#81D7B5] text-slate-900" : "bg-[#F2FCF7] border-[#D2F1E4] text-slate-700"}`}>
+          Lectures
+        </button>
+        <button onClick={() => setTab("tutorials")}
+          className={`rounded-xl px-4 py-1.5 text-sm border transition ${tab === "tutorials" ? "bg-[#DFF7EC] border-[#81D7B5] text-slate-900" : "bg-[#F2FCF7] border-[#D2F1E4] text-slate-700"}`}>
+          Tutorials
+        </button>
+      </div>
+
+      {tab === "lectures" && <>
+        <ModulePicker modules={MODULES} currentId={moduleId} onPick={id => setModuleId(id)} />
+        <LecturesGrid lectures={activeModule.lectures} onOpen={id => setLectureId(id)} currentLectureId={lectureId} moduleId={activeModule.id} />
+        {currentLecture && <LectureViewer title={currentLecture.title} url={currentLecture.url} />}
+      </>}
+
+      {tab === "tutorials" && <TutorialsTab />}
     </Section>
   );
 }
