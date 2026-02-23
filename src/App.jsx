@@ -275,7 +275,7 @@ function ScheduleCards({ apiKey, sheetId, tabName }) {
             const moduleImage = rawImage
               ? rawImage.replace(
                   /https:\/\/drive\.google\.com\/file\/d\/([^/]+)\/.*/,
-                  "https://drive.google.com/uc?export=view&id=$1"
+                  "https://drive.google.com/thumbnail?id=$1&sz=w400"
                 )
               : "";
 
