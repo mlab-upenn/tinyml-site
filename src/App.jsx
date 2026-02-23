@@ -666,7 +666,7 @@ export default function App() {
           <NavBtn id="schedule" label="Schedule" />
           <NavBtn id="projects" label="Projects" />
           <NavBtn id="staff" label="Staff" />
-          <<NavBtn id="lectures" label="Lectures" />
+          <NavBtn id="lectures" label="Lectures" />
         </nav>
       
         {/* Right spacer so the nav is truly centered on laptop */}
