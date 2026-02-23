@@ -43,8 +43,9 @@ const MODULES = [
   },
 ];
 
-const DRIVE_API_KEY = "AIzaSyCjjW3RjE6y026TTk3qLXDEs-i6RWor30g";
-const TUTORIALS_FOLDER_ID = "1J1vvma5Dt2wcpESZKSrANoH9gW34Otmb";
+const TUTORIALS_SHEET_ID = "1L6WLGM4y5ixp6EG2TJ875FnBK7vz_sGov1brZ-8NcyA";
+const TUTORIALS_TAB = "Tutorials";
+const API_KEY = "AIzaSyCjjW3RjE6y026TTk3qLXDEs-i6RWor30g";
 
 /* 1) URL-hash helpers */
 function readHash() {
@@ -57,15 +58,29 @@ function writeHash(moduleId, lectureId) {
   if (window.location.hash !== next) window.location.hash = next;
 }
 
-/* 2) Fetch tutorials from Drive folder */
+/* 2) Fetch tutorials from Google Sheet */
 function useTutorials() {
   const [tutorials, setTutorials] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
   React.useEffect(() => {
-    fetch(`https://www.googleapis.com/drive/v3/files?q='${TUTORIALS_FOLDER_ID}'+in+parents+and+trashed=false&fields=files(id,name,webViewLink,mimeType)&orderBy=name&key=${DRIVE_API_KEY}`)
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${TUTORIALS_SHEET_ID}?includeGridData=true&ranges=${encodeURIComponent(TUTORIALS_TAB + "!A:C")}&key=${API_KEY}`;
+    fetch(url)
       .then(r => r.json())
-      .then(data => { setTutorials(data.files || []); setLoading(false); })
+      .then(data => {
+        const rows = data?.sheets?.[0]?.data?.[0]?.rowData || [];
+        const headers = rows[0]?.values?.map(c => c?.formattedValue || "") || [];
+        const items = rows.slice(1).map(row => {
+          const vals = row?.values || [];
+          const obj = {};
+          headers.forEach((h, i) => {
+            obj[h] = vals[i]?.hyperlink || vals[i]?.formattedValue || "";
+          });
+          return obj;
+        }).filter(r => r.Name);
+        setTutorials(items);
+        setLoading(false);
+      })
       .catch(e => { setError(String(e)); setLoading(false); });
   }, []);
   return { tutorials, loading, error };
@@ -250,14 +265,15 @@ function TutorialsTab() {
   const { tutorials, loading, error } = useTutorials();
   if (loading) return <div className="mt-8 text-slate-600 dark:text-white/70">Loading tutorials…</div>;
   if (error) return <div className="mt-8 text-rose-600">Error: {error}</div>;
-  if (!tutorials.length) return <div className="mt-8 text-slate-600 dark:text-white/70">No tutorials yet — add a doc to the Drive folder and it will appear here.</div>;
+  if (!tutorials.length) return <div className="mt-8 text-slate-600 dark:text-white/70">No tutorials yet — add a row to the Tutorials sheet and it will appear here.</div>;
   return (
     <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-      {tutorials.map(t => (
-        <a key={t.id} href={t.webViewLink} target="_blank" rel="noreferrer"
+      {tutorials.map((t, i) => (
+        <a key={i} href={t.URL} target="_blank" rel="noreferrer"
           className="rounded-xl p-4 border border-[#D2F1E4] bg-[#F2FCF7] hover:bg-[#DFF7EC] transition block">
           <div className="text-xs uppercase tracking-wide text-slate-500 mb-1">Tutorial</div>
-          <div className="font-semibold text-slate-900">{t.name}</div>
+          <div className="font-semibold text-slate-900">{t.Name}</div>
+          {t.Description && <div className="mt-1 text-sm text-slate-600">{t.Description}</div>}
         </a>
       ))}
     </div>
@@ -300,7 +316,6 @@ export default function Lectures() {
 
   return (
     <Section eyebrow="Course Content" title="Lectures">
-      {/* Tab switcher */}
       <div className="flex gap-2 mb-6">
         <button onClick={() => setTab("lectures")}
           className={`rounded-xl px-4 py-1.5 text-sm border transition ${tab === "lectures" ? "bg-[#DFF7EC] border-[#81D7B5] text-slate-900" : "bg-[#F2FCF7] border-[#D2F1E4] text-slate-700"}`}>
